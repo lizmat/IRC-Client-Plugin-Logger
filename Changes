@@ -2,5 +2,12 @@ Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
 
+0.0.2  2021-04-22T23:18:31+02:00
+    - Add support for Mode message
+    - Add support for :now parameter
+    - Fix Nick message
+    - Fix Quit message
+    - Add some real tests
+
 0.0.1  2021-04-22T14:48:11+02:00
     - Initial version

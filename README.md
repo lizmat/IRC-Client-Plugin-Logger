@@ -29,7 +29,7 @@ It is a simple IRC logger for `historical` purposes, so **not** for forensic log
 
 It produces logs compatible with the "raw" format of the colabti.org IRC logger, which contains hh::mm timestamps, join / leave / nick notices and messages sent to the channel. It will not log messages that start with '[off]'.
 
-ATTRIBUTES
+PARAMETERS
 ==========
 
 directory
@@ -41,6 +41,11 @@ debug
 -----
 
 A numeric value to indicate debug level. If it is non-zero, it will produce debugging output on STDERR.
+
+now
+---
+
+A `Callable` that should return a `DateTime` object to be used to determine date and time an event should be logged. Defaults to the current time in UTC. Mostly intended for testing purposes to get a reproducible logging result, but can also be used to e.g. have times logged in local time.
 
 DIRECTORY STRUCTURE
 ===================
