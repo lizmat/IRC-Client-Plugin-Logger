@@ -1,0 +1,26 @@
+{
+  "auth": "cpan:ELIZABETH",
+  "authors": [
+    "Elizabeth Mattijsen"
+  ],
+  "build-depends": [
+  ],
+  "depends": [
+    "IRC::Client"
+  ],
+  "description": "IRC logger for historic purposes",
+  "license": "Artistic-2.0",
+  "name": "IRC::Client::Plugin::Logger",
+  "perl": "6.d",
+  "provides": {
+    "IRC::Client::Plugin::Logger": "lib/IRC/Client/Plugin/Logger.rakumod"
+  },
+  "resources": [
+  ],
+  "source-url": "",
+  "tags": [
+  ],
+  "test-depends": [
+  ],
+  "version": "0.0.1"
+}

@@ -1,0 +1,6 @@
+.precomp/
+/IRC-Client-Plugin-Logger-*
+/logs/
+/releases/
+run
+test-wiz
