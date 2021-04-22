@@ -1,6 +1,8 @@
 use Test;
 use IRC::Client::Plugin::Logger;
 
+plan 1;
+
 pass "replace me";
 
-done-testing;
+# vim: expandtab shiftwidth=4
