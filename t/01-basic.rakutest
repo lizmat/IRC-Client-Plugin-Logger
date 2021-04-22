@@ -1,4 +1,5 @@
 use Test;
+use IRC::Client;
 use IRC::Client::Plugin::Logger;
 
 plan 1;
