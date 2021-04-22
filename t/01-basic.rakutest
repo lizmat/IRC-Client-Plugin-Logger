@@ -4,6 +4,90 @@ use IRC::Client::Plugin::Logger;
 
 plan 1;
 
-pass "replace me";
+# Many parameters are required
+my $irc      := IRC::Client.new;
+my $nick     := 'LizBot';
+my $username := 'zoppodips';
+my $host     := 'localhost';
+my $usermask := 'usermask';
+my $command  := 'command';
+my $args     := 'args';
+my $channel  := '#wiz';
+
+class Server {
+    method current-nick() { 'current-nick' }
+    method channels() { [$channel] }
+}
+my $server := Server;
+
+my $defaults := \(
+  :$irc,      :$username, :$host, :$usermask,
+  :$command,  :$server,   :$args, :$channel,
+);
+
+my constant Join    = IRC::Client::Message::Join;
+my constant Message = IRC::Client::Message::Privmsg::Channel;
+my constant Mode    = IRC::Client::Message::Mode::Channel;
+my constant Nick    = IRC::Client::Message::Nick;
+my constant Part    = IRC::Client::Message::Part;
+my constant Quit    = IRC::Client::Message::Quit;
+
+my $join := Join.new: |$defaults, :$nick;
+my $part := Part.new: |$defaults, :$nick;
+
+my $new-nick := 'FooBot';
+my $tofoo  := Nick.new: |$defaults, :$nick,           :$new-nick;
+my $tonick := Nick.new: |$defaults, :nick($new-nick), :new-nick($nick);
+
+my $message1 := Message.new: |$defaults, :nick<lizmat>,
+  :text("p6parcel is pre-GLR is it not ?");
+my $message2 := Message.new: |$defaults, :nick<nine>,
+  :text("ChangeLog says for 2015.9 Parcel is no longer a type");
+
+my $directory := $*TMPDIR.add("logs-{time}");
+mkdir $directory;  # make sure we haz a log dir
+
+my $year  := 2021;
+my $time = DateTime.new($year,4,22,19,5,43,:timezone(0));
+my $now := { $time }
+
+my $logger := IRC::Client::Plugin::Logger.new:
+  :$directory,
+  :$now
+;
+
+#   event      seconds
+for $join,     83,
+    $tofoo,    27,
+    $message1, 63,
+    $message2, 57,
+    $tonick,   89,
+    $part,     12
+-> $event, $seconds {
+    $logger.irc-all($event);
+    $time .= later(:$seconds);
+}
+
+my $path = $directory.add($channel.substr(1)).add($year).add($time.yyyy-mm-dd);
+
+is $path.slurp, q:to/LOG/, 'was all logged correctly';
+[19:05] *** LizBot joined
+[19:07] *** LizBot is now known as FooBot
+
+[19:07] <lizmat> p6parcel is pre-GLR is it not ?
+
+[19:08] <nine> ChangeLog says for 2015.9 Parcel is no longer a type
+
+[19:09] *** FooBot is now known as LizBot
+
+[19:11] *** LizBot left
+LOG
+
+# cleanup
+$path.unlink;
+until ($path .= parent) eq $directory {
+    $path.rmdir;
+}
+$directory.rmdir;
 
 # vim: expandtab shiftwidth=4
