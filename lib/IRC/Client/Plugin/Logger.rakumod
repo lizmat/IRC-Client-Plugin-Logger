@@ -1,8 +1,9 @@
 use IRC::Client;
 
-class IRC::Client::Plugin::Logger:ver<0.0.1>:auth<cpan:ELIZABETH> {
+class IRC::Client::Plugin::Logger:ver<0.0.2>:auth<cpan:ELIZABETH> {
     has IO()  $.directory is required;
-    has Int() $.debug = 0;
+    has Int() $.debug        = 0;
+    has       &!now is built = { DateTime.now.utc };
 
     my constant Join    = IRC::Client::Message::Join;
     my constant Message = IRC::Client::Message::Privmsg::Channel;
@@ -11,14 +12,10 @@ class IRC::Client::Plugin::Logger:ver<0.0.1>:auth<cpan:ELIZABETH> {
     my constant Part    = IRC::Client::Message::Part;
     my constant Quit    = IRC::Client::Message::Quit;
 
-    sub hhmm(--> Str:D) {
-        sprintf "[%02d:%02d]", .hour, .minute
-          with DateTime.new(now).utc
-    }
     method log(Str:D $channel, Str:D $text) {
-        my $now := DateTime.new(now).utc;
+        my $now := &!now();
         my $dir := $!directory.add($channel.substr(1)).add($now.year);
-        $dir.mkdir;  # just in case
+        $dir.mkdir unless $dir.e;
 
         $dir.add($now.yyyy-mm-dd).spurt:
           "&sprintf("[%02d:%02d]", $now.hour, $now.minute) $text\n",
@@ -69,8 +66,9 @@ class IRC::Client::Plugin::Logger:ver<0.0.1>:auth<cpan:ELIZABETH> {
 
     multi method irc-all(Nick:D $event --> Nil) {
         self.log:
-          $event.channel,
-          "*** $event.nick() is now known as $event.new-nick()\n";
+          $_ ~~ Pair ?? .key !! $_,
+          "*** $event.nick() is now known as $event.new-nick()\n"
+          for $event.server.channels;
     }
 
     multi method irc-all(Part:D $event --> Nil) {
@@ -127,7 +125,7 @@ IRC logger, which contains hh::mm timestamps, join / leave / nick
 notices and messages sent to the channel.  It will not log messages
 that start with '[off]'.
 
-=head1 ATTRIBUTES
+=head1 PARAMETERS
 
 =head2 directory
 
@@ -138,6 +136,14 @@ by the process that runs the C<IRC::Client>.
 
 A numeric value to indicate debug level.  If it is non-zero, it will
 produce debugging output on STDERR.
+
+=head2 now
+
+A C<Callable> that should return a C<DateTime> object to be used to
+determine date and time an event should be logged.  Defaults to the
+current time in UTC.  Mostly intended for testing purposes to get a
+reproducible logging result, but can also be used to e.g. have times
+logged in local time.
 
 =head1 DIRECTORY STRUCTURE
 
