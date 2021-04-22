@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/lizmat/IRC-Client-Plugin-Logger/workflows/test/badge.svg)](https://github.com/lizmat/IRC-Client-Plugin-Logger/actions)
+
 NAME
 ====
 
