@@ -6,6 +6,7 @@ class IRC::Client::Plugin::Logger:ver<0.0.1>:auth<cpan:ELIZABETH> {
 
     my constant Join    = IRC::Client::Message::Join;
     my constant Message = IRC::Client::Message::Privmsg::Channel;
+    my constant Mode    = IRC::Client::Message::Mode::Channel;
     my constant Nick    = IRC::Client::Message::Nick;
     my constant Part    = IRC::Client::Message::Part;
     my constant Quit    = IRC::Client::Message::Quit;
@@ -60,6 +61,12 @@ class IRC::Client::Plugin::Logger:ver<0.0.1>:auth<cpan:ELIZABETH> {
         ) unless $text.starts-with('[off]');
     }
 
+    multi method irc-all(Mode:D $event --> Nil) {
+        self.log:
+          $event.channel,
+          "*** $event.nick() sets mode: $event.mode() $event.nicks()\n";
+    }
+
     multi method irc-all(Nick:D $event --> Nil) {
         self.log:
           $event.channel,
@@ -74,8 +81,9 @@ class IRC::Client::Plugin::Logger:ver<0.0.1>:auth<cpan:ELIZABETH> {
 
     multi method irc-all(Quit:D $event --> Nil) {
         self.log:
-          $event.channel,
-          "*** $event.nick() left";
+          $_ ~~ Pair ?? .key !! $_,
+          "*** $event.nick() left"
+          for $event.server.channels;
     }
 
     multi method irc-all($event --> Nil) {
