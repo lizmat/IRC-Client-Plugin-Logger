@@ -44,7 +44,7 @@ my $message1 := Message.new: |$defaults, :nick<lizmat>,
 my $message2 := Message.new: |$defaults, :nick<nine>,
   :text("ChangeLog says for 2015.9 Parcel is no longer a type");
 
-my $directory := $?FILE.IO.sibling("logs-{time}");
+my $directory := $*TMPDIR.add("logs-{time}");
 mkdir $directory;  # make sure we haz a log dir
 
 my $year  := 2021;
