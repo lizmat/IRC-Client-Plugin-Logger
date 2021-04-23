@@ -1,5 +1,5 @@
-say run(<raku --version>, :out).out.slurp;
-say "Running on $*DISTRO.gist().";
+say run(<raku --version>, :out).out.slurp.chomp;
+say "Running on $*DISTRO.gist().\n";
 
 say "Testing {"dist.ini".IO.lines.head.substr(7)}";
 
