@@ -1,14 +1,16 @@
 use IRC::Client;
 
-class IRC::Client::Plugin::Logger:ver<0.0.2>:auth<cpan:ELIZABETH> {
+class IRC::Client::Plugin::Logger:ver<0.0.3>:auth<cpan:ELIZABETH> {
     has IO()  $.directory is required;
     has Int() $.debug        = 0;
     has       &!now is built = { DateTime.now.utc };
+    has       %!channels;  # %!channels<nick><channel> = 1
 
     my constant Join    = IRC::Client::Message::Join;
     my constant Message = IRC::Client::Message::Privmsg::Channel;
     my constant Mode    = IRC::Client::Message::Mode::Channel;
     my constant Nick    = IRC::Client::Message::Nick;
+    my constant Numeric = IRC::Client::Message::Numeric;
     my constant Part    = IRC::Client::Message::Part;
     my constant Quit    = IRC::Client::Message::Quit;
 
@@ -39,13 +41,16 @@ class IRC::Client::Plugin::Logger:ver<0.0.2>:auth<cpan:ELIZABETH> {
     }
 
     multi method irc-all(Join:D $event --> Nil) {
-        $event.server.current-nick eq $event.nick
-          ?? $!debug
-            ?? self!debug($event)
-            !! Nil
-          !! self.log:
-               $event.channel,
-               "*** $event.nick() joined";
+        my $nick := $event.nick;
+
+        if $nick eq $event.server.current-nick {
+            self!debug($event) if $!debug;
+        }
+        else {
+            my $channel := $event.channel;
+            self.log: $channel, "*** $nick joined";
+            %!channels{$nick}{$channel} := 1;
+        }
     }
 
     multi method irc-all(Message:D $event --> Nil) {
@@ -65,23 +70,38 @@ class IRC::Client::Plugin::Logger:ver<0.0.2>:auth<cpan:ELIZABETH> {
     }
 
     multi method irc-all(Nick:D $event --> Nil) {
-        self.log:
-          $_ ~~ Pair ?? .key !! $_,
-          "*** $event.nick() is now known as $event.new-nick()\n"
-          for $event.server.channels;
+        my $old-nick := $event.nick;
+        my $new-nick := $event.new-nick;
+
+        self.log: $_, "*** $old-nick is now known as $new-nick\n"
+          for %!channels{$old-nick}.keys;
+
+        %!channels{$new-nick} = %!channels{$old-nick}:delete;
+    }
+
+    multi method irc-all(Numeric:D $event --> Nil) {
+        if $event.command == 353 {   # listing nicks on channels
+            my $channel := $event.args[2];
+            %!channels{$_}{$channel} := 1 for $event.args[3].words;
+        }
+        else {
+            self!debug($event);
+        }
     }
 
     multi method irc-all(Part:D $event --> Nil) {
-        self.log:
-          $event.channel,
-          "*** $event.nick() left";
+        my $nick    := $event.nick;
+        my $channel := $event.channel;
+        self.log: $channel, "*** $nick left";
+        %!channels{$nick}{$channel}:delete;
     }
 
     multi method irc-all(Quit:D $event --> Nil) {
-        self.log:
-          $_ ~~ Pair ?? .key !! $_,
-          "*** $event.nick() left"
-          for $event.server.channels;
+        my $nick := $event.nick;
+
+        if %!channels{$nick}:delete -> $channels {
+            self.log: $_, "*** $nick left" for $channels.keys;
+        }
     }
 
     multi method irc-all($event --> Nil) {

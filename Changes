@@ -2,6 +2,10 @@ Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
 
+0.0.3  2021-04-23T13:15:47+02:00
+    - Keep mapping of nicks and channels that they're on
+    - Only log QUIT of a nick on a channel they're actually on
+
 0.0.2  2021-04-22T23:18:31+02:00
     - Add support for Mode message
     - Add support for :now parameter
