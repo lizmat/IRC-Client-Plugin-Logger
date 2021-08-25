@@ -1,6 +1,7 @@
 Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
+    - Add support for IRC::Client::Message::Topic
 
 0.0.3  2021-04-23T13:15:47+02:00
     - Keep mapping of nicks and channels that they're on

@@ -12,6 +12,7 @@ class IRC::Client::Plugin::Logger:ver<0.0.3>:auth<cpan:ELIZABETH> {
     my constant Nick    = IRC::Client::Message::Nick;
     my constant Numeric = IRC::Client::Message::Numeric;
     my constant Part    = IRC::Client::Message::Part;
+    my constant Topic   = IRC::Client::Message::Topic;
     my constant Quit    = IRC::Client::Message::Quit;
 
     method log(Str:D $channel, Str:D $text) {
@@ -102,6 +103,12 @@ class IRC::Client::Plugin::Logger:ver<0.0.3>:auth<cpan:ELIZABETH> {
         if %!channels{$nick}:delete -> $channels {
             self.log: $_, "*** $nick left" for $channels.keys;
         }
+    }
+
+    multi method irc-all(Topic:D $event --> Nil) {
+        self.log:
+          $event.channel,
+          "*** $event.nick() changes topic to: $event.text()";
     }
 
     multi method irc-all($event --> Nil) {
