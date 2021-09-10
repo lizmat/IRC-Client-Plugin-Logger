@@ -1,6 +1,12 @@
 Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
+
+0.0.4  2021-09-10T14:01:06+02:00
+    - Change file extension to .rakumod
+    - Migrate to zef ecosystem
+    - Update email address
+    - Add response when addressed
     - Add support for IRC::Client::Message::Topic
 
 0.0.3  2021-04-23T13:15:47+02:00

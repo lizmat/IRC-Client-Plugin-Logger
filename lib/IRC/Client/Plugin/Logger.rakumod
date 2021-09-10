@@ -1,6 +1,6 @@
 use IRC::Client;
 
-class IRC::Client::Plugin::Logger:ver<0.0.3>:auth<cpan:ELIZABETH> {
+class IRC::Client::Plugin::Logger:ver<0.0.4>:auth<zef:lizmat> {
     has IO()  $.directory is required;
     has Int() $.debug        = 0;
     has       &!now is built = { DateTime.now.utc };
@@ -34,6 +34,11 @@ class IRC::Client::Plugin::Logger:ver<0.0.3>:auth<cpan:ELIZABETH> {
                 note $event;
             }
         }
+    }
+
+    method irc-to-me($event) {
+        $event.reply:
+          "Logging {$event.channel} with Raku module {self.^name} {self.^ver}";
     }
 
     proto method irc-all($event) {
