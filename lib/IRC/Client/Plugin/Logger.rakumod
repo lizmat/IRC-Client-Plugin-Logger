@@ -1,13 +1,13 @@
-use IRC::Client;
+use IRC::Client:ver<4.0.1>:auth<zef:lizmat>;
 
-class IRC::Client::Plugin::Logger:ver<0.0.4>:auth<zef:lizmat> {
+class IRC::Client::Plugin::Logger:ver<0.0.5>:auth<zef:lizmat> {
     has IO()  $.directory is required;
     has Int() $.debug        = 0;
     has       &!now is built = { DateTime.now.utc };
     has       %!channels;  # %!channels<nick><channel> = 1
 
     my constant Join    = IRC::Client::Message::Join;
-    my constant Message = IRC::Client::Message::Privmsg::Channel;
+    my constant PrivMsg = IRC::Client::Message::Privmsg::Channel;
     my constant Mode    = IRC::Client::Message::Mode::Channel;
     my constant Nick    = IRC::Client::Message::Nick;
     my constant Numeric = IRC::Client::Message::Numeric;
@@ -59,7 +59,7 @@ class IRC::Client::Plugin::Logger:ver<0.0.4>:auth<zef:lizmat> {
         }
     }
 
-    multi method irc-all(Message:D $event --> Nil) {
+    multi method irc-all(PrivMsg:D $event --> Nil) {
         my $text := $event.text;
         self.log(
           $event.channel,

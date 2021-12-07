@@ -6,7 +6,7 @@
   "build-depends": [
   ],
   "depends": [
-    "IRC::Client:ver<4.0.0>:auth<zef:lizmat>"
+    "IRC::Client:ver<4.0.1>:auth<zef:lizmat>"
   ],
   "description": "IRC logger for historic purposes",
   "license": "Artistic-2.0",
@@ -22,5 +22,5 @@
   ],
   "test-depends": [
   ],
-  "version": "0.0.4"
+  "version": "0.0.5"
 }

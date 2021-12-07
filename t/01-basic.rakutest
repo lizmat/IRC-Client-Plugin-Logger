@@ -26,7 +26,7 @@ my $defaults := \(
 );
 
 my constant Join    = IRC::Client::Message::Join;
-my constant Message = IRC::Client::Message::Privmsg::Channel;
+my constant PrivMsg = IRC::Client::Message::Privmsg::Channel;
 my constant Mode    = IRC::Client::Message::Mode::Channel;
 my constant Nick    = IRC::Client::Message::Nick;
 my constant Part    = IRC::Client::Message::Part;
@@ -39,9 +39,9 @@ my $new-nick := 'FooBot';
 my $tofoo  := Nick.new: |$defaults, :$nick,           :$new-nick;
 my $tonick := Nick.new: |$defaults, :nick($new-nick), :new-nick($nick);
 
-my $message1 := Message.new: |$defaults, :nick<lizmat>,
+my $message1 := PrivMsg.new: |$defaults, :nick<lizmat>,
   :text("p6parcel is pre-GLR is it not ?");
-my $message2 := Message.new: |$defaults, :nick<nine>,
+my $message2 := PrivMsg.new: |$defaults, :nick<nine>,
   :text("ChangeLog says for 2015.9 Parcel is no longer a type");
 
 my $directory := $*TMPDIR.add("logs-{time}");
