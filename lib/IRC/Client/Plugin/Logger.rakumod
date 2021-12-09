@@ -1,6 +1,6 @@
-use IRC::Client:ver<4.0.1>:auth<zef:lizmat>;
+use IRC::Client:ver<4.0.2>:auth<zef:lizmat>;
 
-class IRC::Client::Plugin::Logger:ver<0.0.5>:auth<zef:lizmat> {
+class IRC::Client::Plugin::Logger:ver<0.0.6>:auth<zef:lizmat> {
     has IO()  $.directory is required;
     has Int() $.debug        = 0;
     has       &!now is built = { DateTime.now.utc };

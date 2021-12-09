@@ -14,7 +14,7 @@ my $command  := 'command';
 my $args     := 'args';
 my $channel  := '#wiz';
 
-class Server {
+class Server is IRC::Client::Server {
     method current-nick() { 'current-nick' }
     method channels() { [$channel] }
 }
