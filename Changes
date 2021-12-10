@@ -2,6 +2,9 @@ Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
 
+0.0.8  2021-12-10T16:40:17+01:00
+    - Fix dependency version mismatch
+
 0.0.7  2021-12-10T16:24:14+01:00
     - Bump dependency on IRC::Client to get fixed reconnect capability
 
