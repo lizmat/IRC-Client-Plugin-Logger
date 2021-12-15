@@ -2,6 +2,9 @@ Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
 
+0.0.9  2021-12-15T15:28:07+01:00
+    - Up IRC::Client dependency for better PING tests
+
 0.0.8  2021-12-10T16:40:17+01:00
     - Fix dependency version mismatch
 
