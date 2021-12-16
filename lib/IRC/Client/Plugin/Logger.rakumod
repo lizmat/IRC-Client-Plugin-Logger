@@ -1,6 +1,6 @@
 use IRC::Client:ver<4.0.6>:auth<zef:lizmat>;
 
-class IRC::Client::Plugin::Logger:ver<0.0.9>:auth<zef:lizmat> {
+class IRC::Client::Plugin::Logger:ver<0.0.10>:auth<zef:lizmat> {
     has IO()  $.directory is required;
     has Int() $.debug        = 0;
     has       &!now is built = { DateTime.now.utc };
@@ -20,8 +20,10 @@ class IRC::Client::Plugin::Logger:ver<0.0.9>:auth<zef:lizmat> {
         my $dir := $!directory.add($channel.substr(1)).add($now.year);
         $dir.mkdir unless $dir.e;
 
+        my str $hour   = $_ < 10 ?? "0" ~ $_ !! .Str given $now.hour;
+        my str $minute = $_ < 10 ?? "0" ~ $_ !! .Str given $now.minute;
         $dir.add($now.yyyy-mm-dd).spurt:
-          "&sprintf("[%02d:%02d]", $now.hour, $now.minute) $text\n",
+          '[' ~ $hour ~ ':' ~ $minute ~ '] ' ~ $text ~ "\n",
           :append;
     }
 
@@ -61,11 +63,20 @@ class IRC::Client::Plugin::Logger:ver<0.0.9>:auth<zef:lizmat> {
 
     multi method irc-all(PrivMsg:D $event --> Nil) {
         my $text := $event.text;
+
+        my sub normalize($text) {
+            $text.subst("\x7F", '^H', :global)
+                 .subst("\x17", '^W', :global)
+                 .subst(/ "\x03" \d? /,                             :global)
+                 .subst(/ <[\x00..\x1f] - [\x09..\x0a] - [\x0d]> /, :global)
+                 .subst(/ '[' [ \d ';' ]? \d ** 1..2 m /,           :global)
+        }
+
         self.log(
           $event.channel,
           $text.substr-eq("ACTION ",1)
-            ?? "* $event.nick() $event.text.substr(8,*-1)\n"
-            !! "<$event.nick()> $event.text()\n"
+            ?? "* $event.nick() &normalize($event.text.substr(8,*-1))\n"
+            !! "<$event.nick()> &normalize($event.text)\n"
         ) unless $text.starts-with('[off]');
     }
 
