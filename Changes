@@ -2,6 +2,11 @@ Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
 
+0.0.11  2022-01-07T00:11:14+01:00
+    - Externalize the normalizer logic as an attribute
+    - Add 'default-normalizer' and 'default-now' class methods
+    - Up dependency to hopefully fix connection breakage handling
+
 0.0.10  2021-12-16T14:14:45+01:00
     - Make sure that texts are properly normalized with regards
       to control and colour codes, before being logged

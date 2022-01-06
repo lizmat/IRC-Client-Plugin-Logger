@@ -16,7 +16,13 @@ use IRC::Client::Plugin::Logger;
   :nick<SomeBot>,
   :host<irc.freenode.org>,
   :channels<#channel1 #channel2>,
-  :plugins(IRC::Client::Plugin::Logger.new(:directory<logs>,:debug)),
+  :plugins(IRC::Client::Plugin::Logger.new(
+     :directory<logs>,
+     :debug,
+     :normalizer(&normalizer),
+     :now({ DateTime.now }),
+     :next-date( -> $, $date { say $date }),
+   )),
 )
 ```
 
@@ -42,10 +48,24 @@ debug
 
 A numeric value to indicate debug level. If it is non-zero, it will produce debugging output on STDERR.
 
+next-date
+---------
+
+A `Callable` that should take the `IRC::CLient::Plugin::Logger` object as the first positional, and a string in the form of "YYYY-MM-DD" as the second positional argument. It will be called about 1 minute after the first message has been received on a new date. By default, the text "$yyyy-mm-dd has started on $directory" will be noted.
+
+normalizer
+----------
+
+A `Callable` that should take the text to be logged and remove anything that is not considered fit for logging, and return that. Defaults to logic that removes control characters.
+
+The default handler for `normalizer` can be obtained with the `default-normalizer` class method.
+
 now
 ---
 
 A `Callable` that should return a `DateTime` object to be used to determine date and time an event should be logged. Defaults to the current time in UTC. Mostly intended for testing purposes to get a reproducible logging result, but can also be used to e.g. have times logged in local time.
+
+The default handler for `now` can be obtained with the `default-now` class method.
 
 DIRECTORY STRUCTURE
 ===================
@@ -59,7 +79,7 @@ So, for logging the #raku channel on 22 April 2021 with a directory setting of `
 AUTHOR
 ======
 
-Elizabeth Mattijsen <liz@wenzperl.nl>
+Elizabeth Mattijsen <liz@raku.rocks>
 
 Source can be located at: https://github.com/lizmat/IRC-Client-Plugin-Logger . Comments and Pull Requests are welcome.
 

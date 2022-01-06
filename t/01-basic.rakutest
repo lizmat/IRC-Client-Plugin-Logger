@@ -2,7 +2,10 @@ use Test;
 use IRC::Client;
 use IRC::Client::Plugin::Logger;
 
-plan 1;
+plan 3;
+
+isa-ok IRC::Client::Plugin::Logger.default-normalizer, Callable;
+isa-ok IRC::Client::Plugin::Logger.default-now,        Callable;
 
 # Many parameters are required
 my $irc      := IRC::Client.new;
