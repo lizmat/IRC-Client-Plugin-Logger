@@ -1,4 +1,4 @@
-use IRC::Client:ver<4.0.7>:auth<zef:lizmat>;
+use IRC::Client:ver<4.0.8>:auth<zef:lizmat>;
 
 my sub default-normalizer($text) {
     $text.subst("\x7F", '^H', :global)
@@ -14,7 +14,7 @@ my sub default-next-date($logger, $yyyy-mm-dd --> Nil) {
     note "$yyyy-mm-dd has started on $logger.directory()";
 }
 
-class IRC::Client::Plugin::Logger:ver<0.0.11>:auth<zef:lizmat> {
+class IRC::Client::Plugin::Logger:ver<0.0.12>:auth<zef:lizmat> {
     has IO()  $.directory is required;
     has Int() $.debug      = 0;
     has       &.normalizer = &default-normalizer;

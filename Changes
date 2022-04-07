@@ -2,6 +2,9 @@ Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
 
+0.0.12  2022-04-07T17:47:00+02:00
+    - Update IRC::Client dependency
+
 0.0.11  2022-01-07T00:11:14+01:00
     - Externalize the normalizer logic as an attribute
     - Add 'default-normalizer' and 'default-now' class methods
