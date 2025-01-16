@@ -2,5 +2,6 @@
 /IRC-Client-Plugin-Logger-*
 /logs/
 /releases/
+*.rakucov
 run
 test-wiz

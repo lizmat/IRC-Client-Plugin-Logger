@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/lizmat/IRC-Client-Plugin-Logger/workflows/test/badge.svg)](https://github.com/lizmat/IRC-Client-Plugin-Logger/actions)
+[![Actions Status](https://github.com/lizmat/IRC-Client-Plugin-Logger/actions/workflows/linux.yml/badge.svg)](https://github.com/lizmat/IRC-Client-Plugin-Logger/actions) [![Actions Status](https://github.com/lizmat/IRC-Client-Plugin-Logger/actions/workflows/macos.yml/badge.svg)](https://github.com/lizmat/IRC-Client-Plugin-Logger/actions) [![Actions Status](https://github.com/lizmat/IRC-Client-Plugin-Logger/actions/workflows/windows.yml/badge.svg)](https://github.com/lizmat/IRC-Client-Plugin-Logger/actions)
 
 NAME
 ====
@@ -29,7 +29,7 @@ use IRC::Client::Plugin::Logger;
 DESCRIPTION
 ===========
 
-IRC::Client::Plugin::Logger exports a class that is to be used as a plugin of the [IRC::Client](IRC::Client) framework.
+The `IRC::Client::Plugin::Logger` distribution exports a `IRC::Client::Plugin::Logger` class that is to be used as a plugin of the [`IRC::Client`](https://raku.land/zef:lizmat/IRC::Client) framework.
 
 It is a simple IRC logger for `historical` purposes, so **not** for forensic logging. As such, it does **not** keep IP number information, user names nor exact timestamps.
 
@@ -83,10 +83,12 @@ Elizabeth Mattijsen <liz@raku.rocks>
 
 Source can be located at: https://github.com/lizmat/IRC-Client-Plugin-Logger . Comments and Pull Requests are welcome.
 
+If you like this module, or what I'm doing more generally, committing to a [small sponsorship](https://github.com/sponsors/lizmat/) would mean a great deal to me!
+
 COPYRIGHT AND LICENSE
 =====================
 
-Copyright 2021 Elizabeth Mattijsen
+Copyright 2021, 2025 Elizabeth Mattijsen
 
 This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
 

@@ -1,9 +1,13 @@
 Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
+    - Up IRC::Client dependency
+    - Add CI badge for each OS
+    - Add sponsor button and link
+    - Update copyright year
 
 0.0.12  2022-04-07T17:47:00+02:00
-    - Update IRC::Client dependency
+    - Up IRC::Client dependency
 
 0.0.11  2022-01-07T00:11:14+01:00
     - Externalize the normalizer logic as an attribute

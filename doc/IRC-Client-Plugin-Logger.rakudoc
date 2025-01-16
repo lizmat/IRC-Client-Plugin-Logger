@@ -1,0 +1,121 @@
+=begin pod
+
+=head1 NAME
+
+IRC::Client::Plugin::Logger - IRC logger for historic purposes
+
+=head1 SYNOPSIS
+
+=begin code :lang<raku>
+
+use IRC::Client;
+use IRC::Client::Plugin::Logger;
+
+.run with IRC::Client.new(
+  :nick<SomeBot>,
+  :host<irc.freenode.org>,
+  :channels<#channel1 #channel2>,
+  :plugins(IRC::Client::Plugin::Logger.new(
+     :directory<logs>,
+     :debug,
+     :normalizer(&normalizer),
+     :now({ DateTime.now }),
+     :next-date( -> $, $date { say $date }),
+   )),
+)
+
+=end code
+
+=head1 DESCRIPTION
+
+The C<IRC::Client::Plugin::Logger> distribution exports a
+C<IRC::Client::Plugin::Logger> class that is to be used as a
+plugin of the L<C<IRC::Client>|https://raku.land/zef:lizmat/IRC::Client>
+framework.
+
+It is a simple IRC logger for C<historical> purposes, so B<not> for
+forensic logging.  As such, it does B<not> keep IP number information,
+user names nor exact timestamps.
+
+It produces logs compatible with the "raw" format of the colabti.org
+IRC logger, which contains hh::mm timestamps, join / leave / nick
+notices and messages sent to the channel.  It will not log messages
+that start with '[off]'.
+
+=head1 PARAMETERS
+
+=head2 directory
+
+The directory in which the logs should be placed.  It should be writable
+by the process that runs the C<IRC::Client>.
+
+=head2 debug
+
+A numeric value to indicate debug level.  If it is non-zero, it will
+produce debugging output on STDERR.
+
+=head2 next-date
+
+A C<Callable> that should take the C<IRC::CLient::Plugin::Logger> object
+as the first positional, and a string in the form of "YYYY-MM-DD" as the
+second positional argument.  It will be called about 1 minute after the
+first message has been received on a new date.  By default, the text
+"$yyyy-mm-dd has started on $directory" will be noted.
+
+=head2 normalizer
+
+A C<Callable> that should take the text to be logged and remove anything
+that is not considered fit for logging, and return that.  Defaults to
+logic that removes control characters.
+
+The default handler for C<normalizer> can be obtained with the
+C<default-normalizer> class method.
+
+=head2 now
+
+A C<Callable> that should return a C<DateTime> object to be used to
+determine date and time an event should be logged.  Defaults to the
+current time in UTC.  Mostly intended for testing purposes to get a
+reproducible logging result, but can also be used to e.g. have times
+logged in local time.
+
+The default handler for C<now> can be obtained with the C<default-now>
+class method.
+
+=head1 DIRECTORY STRUCTURE
+
+From the given directory, a directory will be made for each channel
+(excluding the C<#> prefix).  Inside it, a directory will be made for
+each year in which messages are logged.  Inside that, a file will be
+made for each day that messages are logged, with the name of the
+format `YYYY-MM-DD`.
+
+So, for logging the #raku channel on 22 April 2021 with a directory
+setting of C<~/logs>, you will get:
+
+=begin output
+
+~/logs/raku/2021/2021-04-22
+
+=end output
+
+=head1 AUTHOR
+
+Elizabeth Mattijsen <liz@raku.rocks>
+
+Source can be located at: https://github.com/lizmat/IRC-Client-Plugin-Logger .
+Comments and Pull Requests are welcome.
+
+If you like this module, or what I'm doing more generally, committing to a
+L<small sponsorship|https://github.com/sponsors/lizmat/>  would mean a great
+deal to me!
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2021, 2025 Elizabeth Mattijsen
+
+This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
+
+=end pod
+
+# vim: expandtab shiftwidth=4
