@@ -14,7 +14,7 @@ my sub default-next-date($logger, $yyyy-mm-dd --> Nil) {
     note "$yyyy-mm-dd has started on $logger.directory()";
 }
 
-class IRC::Client::Plugin::Logger:ver<0.0.12>:auth<zef:lizmat> {
+class IRC::Client::Plugin::Logger:ver<0.0.13>:auth<zef:lizmat> {
     has IO()  $.directory is required;
     has Int() $.debug      = 0;
     has       &.normalizer = &default-normalizer;

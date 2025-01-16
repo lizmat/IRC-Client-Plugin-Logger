@@ -1,6 +1,8 @@
 Revision history for IRC-Client-Plugin-Logger
 
 {{$NEXT}}
+
+0.0.13  2025-01-16T19:48:25+01:00
     - Up IRC::Client dependency
     - Add CI badge for each OS
     - Add sponsor button and link
