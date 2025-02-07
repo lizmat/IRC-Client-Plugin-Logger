@@ -14,7 +14,7 @@ use IRC::Client::Plugin::Logger;
 
 .run with IRC::Client.new(
   :nick<SomeBot>,
-  :host<irc.freenode.org>,
+  :host<irc.libera.chat>,
   :channels<#channel1 #channel2>,
   :plugins(IRC::Client::Plugin::Logger.new(
      :directory<logs>,
